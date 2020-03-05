@@ -16,16 +16,16 @@ class User extends AddressComponent {
 		this.updateAvatar = this.updateAvatar.bind(this);
 	}
 	async login(req, res, next){
-		const cap = req.cookies.cap;
-		if (!cap) {
-			console.log('验证码失效')
-			res.send({
-				status: 0,
-				type: 'ERROR_CAPTCHA',
-				message: '验证码失效',
-			})
-			return
-		}
+		// const cap = req.cookies.cap;
+		// if (!cap) {
+		// 	console.log('验证码失效')
+		// 	res.send({
+		// 		status: 0,
+		// 		type: 'ERROR_CAPTCHA',
+		// 		message: '验证码失效',
+		// 	})
+		// 	return
+		// }
 		const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
 			const {username, password, captcha_code} = fields;
@@ -46,14 +46,14 @@ class User extends AddressComponent {
 				})
 				return
 			}
-			if (cap.toString() !== captcha_code.toString()) {
-				res.send({
-					status: 0,
-					type: 'ERROR_CAPTCHA',
-					message: '验证码不正确',
-				})
-				return
-			}
+			// if (cap.toString() !== captcha_code.toString()) {
+			// 	res.send({
+			// 		status: 0,
+			// 		type: 'ERROR_CAPTCHA',
+			// 		message: '验证码不正确',
+			// 	})
+			// 	return
+			// }
 			const newpassword = this.encryption(password);
 			try{
 				const user = await UserModel.findOne({username});
