@@ -253,14 +253,16 @@ class Admin extends AddressComponent {
 		}
 
 		try{
-			var image_path = '';
 			baseHandle.oss(req, 'default').then((url) => {
-				image_path = url;
-				console.log('image_path', url);
-				AdminModel.findOneAndUpdate({id: admin_id}, {$set: {avatar: image_path}});
+				AdminModel.findByIdAndUpdate(admin_id, {avatar: url}, function(err, docs){
+					if(err) 
+						console.log(err);
+					else
+						console.log('更改成功：' + docs);
+				});
 				res.send({
 					status: 1,
-					image_path,
+					image_path: url,
 				})
 			},(err) => {
 				console.log('image err', err);

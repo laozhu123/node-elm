@@ -280,14 +280,12 @@ class User extends AddressComponent {
 		}
 
 		try{
-			var image_path = '';
 			baseHandle.oss(req, 'default').then((url) => {
-				image_path = url;
 				console.log('image_path', url);
-				UserInfoModel.findOneAndUpdate({user_id}, {$set: {avatar: image_path}});
+				UserInfoModel.findByIdAndUpdate(user_id, {avatar: url});
 				res.send({
 					status: 1,
-					image_path,
+					image_path: url,
 				})
 			},(err) => {
 				console.log('image err', err);
