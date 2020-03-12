@@ -11,6 +11,15 @@ import history from 'connect-history-api-fallback';
 import chalk from 'chalk';
 // import Statistic from './middlewares/statistic'
 
+let OSS = require('ali-oss');
+
+const oss_client = new OSS({
+	region: 'oss-cn-hangzhou',
+	accessKeyId: 'LTAI0BcHaJwERnyY',
+	accessKeySecret: 'j4vLaHMEknk5RNEK5hM46gA6CrIvkp',
+	bucket: 'helomall'
+});
+
 const app = express();
 
 app.all('*', (req, res, next) => {
@@ -45,7 +54,6 @@ app.use(session({
 
 app.use(function (req, res, next) {          
     var url = req.originalUrl;//获取url
-    console.log(url)
     next();
 });
 // app.use(expressWinston.logger({
@@ -81,3 +89,5 @@ app.listen(config.port, () => {
 		chalk.green(`成功监听端口：${config.port}`)
 	)
 });
+
+export default oss_client

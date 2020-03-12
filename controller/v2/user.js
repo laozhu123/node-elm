@@ -6,6 +6,8 @@ import UserInfoModel from '../../models/v2/userInfo'
 import UserModel from '../../models/v2/user'
 import crypto from 'crypto'
 import dtime from 'time-formater'
+import BaseComponent from '../../prototype/baseComponent'
+const baseHandle = new BaseComponent();
 
 class User extends AddressComponent {
 	constructor(){
@@ -278,18 +280,25 @@ class User extends AddressComponent {
 		}
 
 		try{
-			const image_path = await this.getPath(req);
-			await UserInfoModel.findOneAndUpdate({user_id}, {$set: {avatar: image_path}});
-			res.send({
-				status: 1,
-				image_path,
-			})
+			var image_path = '';
+			baseHandle.oss(req, 'default').then((url) => {
+				image_path = url;
+				console.log('image_path', url);
+				UserInfoModel.findOneAndUpdate({user_id}, {$set: {avatar: image_path}});
+				res.send({
+					status: 1,
+					image_path,
+				})
+			},(err) => {
+				console.log('image err', err);
+			}); 
+			return
 		}catch(err){
-			console.log('上传图片失败', err);
+			console.log('修改图片失败', err);
 			res.send({
 				status: 0,
 				type: 'ERROR_UPLOAD_IMG',
-				message: '上传图片失败'
+				message: '修改图片失败'
 			})
 		}
 	}
